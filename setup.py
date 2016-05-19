@@ -1,14 +1,29 @@
+import re
+
 from os.path import join, dirname
 from distutils.core import setup
-
-VERSION = '0.2.3'
+from pip.req import parse_requirements
 
 README = open(join(dirname(__file__), 'README.rst')).read()
-REQUIREMENTS = open(join(dirname(__file__), 'requirements.txt')).readlines()
+
+
+def get_version(package):
+    """
+    Return package version as listed in `__version__` in `init.py`.
+    """
+    init_py = open(join(package, '__init__.py')).read()
+    return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(1)
+
+
+def get_requirements():
+    reqs = parse_requirements(join(dirname(__file__), 'requirements.txt'))
+    requirements = [str(ir.req) for ir in reqs]
+    return requirements
+
 
 setup(
     name='django-vmail',
-    version=VERSION,
+    version=get_version('vmail'),
     description="Virtual mail administration django app",
     author="Lewis Gunsch",
     author_email="lewis@gunsch.ca",
@@ -23,7 +38,7 @@ setup(
         'vmail.tests',
     ],
     scripts=[],
-    install_requires=REQUIREMENTS,
+    install_requires=get_requirements(),
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
