@@ -2,6 +2,8 @@
 django-vmail
 ============
 
+|Build Status|
+
 Virtual Mail Administration
 ---------------------------
 
@@ -40,12 +42,11 @@ Bugs & Feature Requests
 -----------------------
 Any bugs reports, or feature requests can be added to the issue_ page at the github project.
 
-.. image:: https://d2weczhvl823v0.cloudfront.net/lgunsch/django-vmail/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
+.. |Build Status| image:: https://travis-ci.org/bit/django-vmail.svg?branch=master
+   :target: https://travis-ci.org/bit/django-vmail
 
-.. _docs: https://github.com/lgunsch/django-vmail/blob/master/docs/configuration.rst
-.. _issue: https://github.com/lgunsch/django-vmail/issues
+.. _docs: https://github.com/bit/django-vmail/blob/master/docs/configuration.rst
+.. _issue: https://github.com/bit/django-vmail/issues
 .. _Workaround: https://workaround.org/ispmail
 .. _Django: https://www.djangoproject.com/
 .. _Dovecot: http://www.dovecot.org/
