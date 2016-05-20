@@ -42,8 +42,8 @@ class BaseCommandTestCase(object):
 
     def test_bad_arg_len(self):
         """Test that an incorrect # of positional arguments raises an error."""
-        self.assertSystemExit(*range(self.arglen - 1))
-        self.assertSystemExit(*range(self.arglen + 1))
+        self.assertSystemExit(*['']*(self.arglen - 1))
+        self.assertSystemExit(*['']*(self.arglen + 1))
 
 
 class TestChangePassword(BaseCommandTestCase, TestCase):
