@@ -66,7 +66,7 @@ class MailUser(models.Model):
         m = hashlib.sha1()
         m.update(str(raw_password))
         m.update(str(salt))
-        digest = base64.b64encode(m.digest() + str(self.salt))
+        digest = base64.b64encode(m.digest() + str(salt))
         return digest
 
     def set_password(self, raw_password):
