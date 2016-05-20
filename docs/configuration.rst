@@ -35,7 +35,7 @@ In ``/etc/postfix/pgsql-virtual-mailbox-maps.cf``: ::
     dbname = <db-name>
 
     query = SELECT 1 \
-    FROM vmail_mailuser \`
+    FROM vmail_mailuser \
         INNER JOIN vmail_domain ON (vmail_mailuser.domain_id = vmail_domain.id) \
     WHERE vmail_mailuser.username='%u' AND \
         vmail_domain.fqdn='%d' AND \
