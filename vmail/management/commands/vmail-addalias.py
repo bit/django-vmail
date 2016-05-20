@@ -2,8 +2,6 @@
 Add an email alias entry command.
 """
 
-from optparse import make_option
-
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
@@ -39,13 +37,13 @@ related to local virtual mailbox users.
 class Command(BaseCommand):
     args = 'owner-domain source-address destination-address [--create-domain]'
     help = (HELP_TEXT)
-    option_list = BaseCommand.option_list + (
-        make_option('--create-domain',
+
+    def add_arguments(self, parser):
+        parser.add_argument('--create-domain',
                     action='store_true',
                     dest='create_domain',
                     default=False,
-                    help='Create the domain which will own the alias if it does not already exist.'),
-    )
+                    help='Create the domain which will own the alias if it does not already exist.')
 
     def handle(self, *args, **options):
         usage = 'Required arguments: source-address destination-address [--create-domain]'

@@ -3,8 +3,6 @@ Set password command for administrators to set the password of existing
 mail users.
 """
 
-from optparse import make_option
-
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -18,17 +16,17 @@ class Command(BaseCommand):
             '--create-domain is used then the domain is also created,\n'
             'given it does not exist. If --password is used then the\n'
             'password is set.')
-    option_list = BaseCommand.option_list + (
-        make_option('--create-domain',
+
+    def add_arguments(self, parser):
+        parser.add_argument('--create-domain',
                     action='store_true',
                     dest='create_domain',
                     default=False,
-                    help='Create the domain if it does not already exist.'),
-        make_option('--password',
+                    help='Create the domain if it does not already exist.')
+        parser.add_argument('--password',
                     dest='password',
                     default=None,
-                    help='Set the default password for the user.'),
-    )
+                    help='Set the default password for the user.')
 
     def handle(self, *args, **options):
         usage = 'Required arguments: email [--create-domain] [--password password]'
