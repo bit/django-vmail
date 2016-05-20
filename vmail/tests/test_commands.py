@@ -2,12 +2,14 @@
 Test the virtual mail management commands.
 """
 
+from __future__ import absolute_import
 import sys
-import StringIO
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import TestCase
+from django.utils.six import StringIO
+
 
 from ..models import MailUser, Domain, Alias
 from . import recipes
@@ -17,10 +19,10 @@ class BaseCommandTestCase(object):
 
     def setUp(self):
         self.syserr = sys.stderr
-        sys.stderr = StringIO.StringIO()
+        sys.stderr = StringIO()
 
         self.sysout = sys.stdout
-        sys.stdout = StringIO.StringIO()
+        sys.stdout = StringIO()
 
     def tearDown(self):
         sys.stdout.close()
@@ -37,7 +39,7 @@ class BaseCommandTestCase(object):
         if they are not provided.
         """
         default_opts = {'verbosity': 0, 'interactive': False}
-        opts = dict(default_opts.items() + opts.items())
+        opts = dict(list(default_opts.items()) + list(opts.items()))
         self.assertRaises(CommandError, call_command, self.cmd, *args, **opts)
 
     def test_bad_arg_len(self):

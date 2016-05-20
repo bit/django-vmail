@@ -2,6 +2,8 @@
 Virtual mail administration models.
 """
 
+from __future__ import absolute_import, unicode_literals
+
 import base64
 import hashlib
 import random
@@ -9,8 +11,11 @@ import string
 
 from django.core.validators import validate_email
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.six.moves import range
 
 
+@python_2_unicode_compatible
 class Domain(models.Model):
     """Represents a virtual mail domain."""
     fqdn = models.CharField(max_length=256, unique=True,
@@ -23,10 +28,11 @@ class Domain(models.Model):
         self.fqdn = self.fqdn.lower()
         super(Domain, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.fqdn
 
 
+@python_2_unicode_compatible
 class MailUser(models.Model):
     """
     Represents a virtual mail user address, also known as the left-hand-side
@@ -64,9 +70,9 @@ class MailUser(models.Model):
         # into normalized strings firt. Use str, since it will throw an error
         # if there are non-ascii characters
         m = hashlib.sha1()
-        m.update(str(raw_password))
-        m.update(str(salt))
-        digest = base64.b64encode(m.digest() + str(salt))
+        m.update(raw_password.encode('utf-8'))
+        m.update(salt.encode('utf-8'))
+        digest = base64.b64encode(m.digest() + salt.encode('utf-8')).decode()
         return digest
 
     def set_password(self, raw_password):
@@ -80,8 +86,8 @@ class MailUser(models.Model):
         Ex: shadigest = Base64(sha1(password + salt) + salt)
         """
         # new salt, avoid whitespace
-        chars = string.letters + string.digits + string.punctuation
-        self.salt = ''.join(random.choice(chars) for x in xrange(self.SALT_LEN))
+        chars = string.ascii_letters + string.digits + string.punctuation
+        self.salt = ''.join(random.choice(chars) for x in range(self.SALT_LEN))
         self.shadigest = self._get_digest(raw_password, self.salt)
 
     def check_password(self, raw_password):
@@ -115,10 +121,11 @@ class MailUser(models.Model):
         user = MailUser.objects.get(username=username, domain=domain)
         return user
 
-    def __unicode__(self):
+    def __str__(self):
         return '{0}@{1}'.format(self.username, self.domain.fqdn)
 
 
+@python_2_unicode_compatible
 class Alias(models.Model):
     """
     Represents a virtual mailbox alias.  A virtual alias cannot receive
@@ -154,5 +161,5 @@ class Alias(models.Model):
         self.destination = self.destination.lower()
         super(Alias, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{0}: {1} > {2}'.format(self.domain.fqdn, self.source, self.destination)

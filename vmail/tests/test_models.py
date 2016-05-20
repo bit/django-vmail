@@ -2,6 +2,7 @@
 Test the virtual mail models.
 """
 
+from __future__ import absolute_import
 import hashlib
 import base64
 
@@ -61,9 +62,9 @@ class MailUserTest(TestCase):
         salt = user.salt
 
         m = hashlib.sha1()
-        m.update(str(self.password))
-        m.update(str(salt))
-        hashed_password = base64.b64encode(m.digest() + str(salt))
+        m.update(self.password.encode('utf-8'))
+        m.update(salt.encode('utf-8'))
+        hashed_password = base64.b64encode(m.digest() + salt.encode('utf-8')).decode()
         self.assertEqual(hashed_password, user.shadigest)
 
     def test_check_password(self):
